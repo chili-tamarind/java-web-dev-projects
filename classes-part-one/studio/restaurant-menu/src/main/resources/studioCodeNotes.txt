@@ -1,0 +1,148 @@
+### **Notes on Class Design**
+
+#### `MenuItem` Class:
+This class represents an individual item on the menu.
+**Fields**:
+1. `String name` - the name of the menu item.
+2. `double price` - the price of the item.
+3. `String description` - a description of the item.
+4. `String category` - the category of the item (appetizer, main course, dessert).
+5. `boolean isNew` - a boolean indicating whether the item is new.
+**Methods**:
+- Constructor to initialize fields.
+- Getters and setters for each field.
+
+
+#### `Menu` Class:
+This class represents the overall menu containing multiple menu items.
+**Fields**:
+1. `ArrayList<MenuItem> menuItems` - a list of menu items.
+2. `Date lastUpdated` - a date representing when the menu was last updated.
+**Methods**:
+- Constructor to initialize the menu.
+- Method to add/remove items from the menu.
+- Getter for last updated.
+- Method to display the entire menu and indicate if an item is new.
+---
+### **Example Code**
+
+#### `MenuItem.java`
+```java
+import java.util.Objects;
+public class MenuItem {
+  private String name;
+  private double price;
+  private String description;
+  private String category; // e.g., appetizer, main course, dessert
+  private boolean isNew; // indicates if the menu item is new
+  // Constructor
+  public MenuItem(String name, double price, String description, String category, boolean isNew) {
+    this.name = name;
+    this.price = price;
+    this.description = description;
+    this.category = category;
+    this.isNew = isNew;
+  }
+  // Getters and setters
+  public String getName() {
+    return name;
+  }
+  public void setName(String name) {
+    this.name = name;
+  }
+  public double getPrice() {
+    return price;
+  }
+  public void setPrice(double price) {
+    this.price = price;
+  }
+  public String getDescription() {
+    return description;
+  }
+  public void setDescription(String description) {
+    this.description = description;
+  }
+  public String getCategory() {
+    return category;
+  }
+  public void setCategory(String category) {
+    this.category = category;
+  }
+  public boolean isNew() {
+    return isNew;
+  }
+  public void setNew(boolean aNew) {
+    isNew = aNew;
+  }
+  @Override
+  public String toString() {
+    return name + " (" + category + ") - $" + price + "\nDescription: " + description +
+        (isNew ? " - NEW!" : "");
+  }
+  // equals and hashCode methods for comparison
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    MenuItem menuItem = (MenuItem) o;
+    return name.equals(menuItem.name) && category.equals(menuItem.category);
+  }
+  @Override
+  public int hashCode() {
+    return Objects.hash(name, category);
+  }
+}
+```
+#### `Menu.java`
+```java
+import java.util.ArrayList;
+import java.util.Date;
+public class Menu {
+  private ArrayList<MenuItem> menuItems;
+  private Date lastUpdated;
+  // Constructor
+  public Menu() {
+    this.menuItems = new ArrayList<>();
+    this.lastUpdated = new Date(); // set the current date when the menu is created
+  }
+  // Method to add a menu item
+  public void addMenuItem(MenuItem item) {
+    if (!menuItems.contains(item)) {
+      menuItems.add(item);
+      updateLastUpdated(); // update the menu's last updated date
+    }
+  }
+  // Method to remove a menu item
+  public void removeMenuItem(MenuItem item) {
+    menuItems.remove(item);
+    updateLastUpdated(); // update the menu's last updated date
+  }
+  // Method to update the lastUpdated field
+  private void updateLastUpdated() {
+    this.lastUpdated = new Date();
+  }
+  // Getter for lastUpdated
+  public Date getLastUpdated() {
+    return lastUpdated;
+  }
+  // Method to display the entire menu
+  public void displayMenu() {
+    for (MenuItem item : menuItems) {
+      System.out.println(item.toString());
+    }
+    System.out.println("Menu last updated: " + lastUpdated);
+  }
+  // Method to display items by category
+  public void displayByCategory(String category) {
+    for (MenuItem item : menuItems) {
+      if (item.getCategory().equalsIgnoreCase(category)) {
+        System.out.println(item.toString());
+      }
+    }
+  }
+}
+```
+### **Explanation:**
+- **`MenuItem`** handles all details about individual menu items such as the name, price, description, and whether it is new.
+- **`Menu`** contains a list of `MenuItem` objects and tracks when the menu was last updated. It allows for adding and removing items and displays the entire menu or items by category.
+You can now use these classes to represent the menu and its items. You may expand these with additional features as needed.
